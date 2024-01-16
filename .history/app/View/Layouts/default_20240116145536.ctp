@@ -42,8 +42,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     <div class="nav-logo"><?php echo $this->Html->link('Your Logo', array('controller' => 'pages', 'action' => 'display', 'home')); ?></div>
     <ul class="nav-links">
         <li><?php echo $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display', 'home')); ?></li>
-		<li><?php echo $this->Html->link('Add a client', array('controller' => 'Clients', 'action' => 'add')); ?></li>
-        <li><?php echo $this->Html->link('View All Images', array('controller' => 'Images', 'action' => 'view')); ?></li>
+        <li><?php echo $this->Html->link('Image Manager', array('controller' => 'Images', 'action' => 'manager')); ?></li>
         <li><?php echo $this->Html->link('Image Upload', array('controller' => 'Images', 'action' => 'add')); ?></li>
     </ul>
 </div>

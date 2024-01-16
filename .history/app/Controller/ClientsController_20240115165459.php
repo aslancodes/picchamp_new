@@ -1,3 +1,4 @@
+
 <?php
 
 // app/Controller/ClientController.php
@@ -65,5 +66,6 @@ public function search() {
 
     $this->set(compact('clients', 'searchTerm'));
 }
+
 
 }

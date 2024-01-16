@@ -88,6 +88,7 @@ if ($this->request->is('post')) {
 
     public function download($id) {
         $image = $this->Image->findById($id);
+
         if (!$image) {
             throw new NotFoundException(__('Invalid image'));
         }

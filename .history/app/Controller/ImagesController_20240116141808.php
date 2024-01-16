@@ -88,6 +88,7 @@ if ($this->request->is('post')) {
 
     public function download($id) {
         $image = $this->Image->findById($id);
+
         if (!$image) {
             throw new NotFoundException(__('Invalid image'));
         }
@@ -95,6 +96,7 @@ if ($this->request->is('post')) {
         if (!isset($image['Image']['filename'])) {
             throw new InternalErrorException(__('Invalid image data'));
         }
+
         $filename = $image['Image']['filename'];
         $file = WWW_ROOT . 'img' . DS . $filename;
 
