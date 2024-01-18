@@ -208,75 +208,15 @@ class ImagevurlController extends AppController {
 
 
     ///download image via client code as csv file 
-    // public function downloadImages() {
-    //     $clients = $this->Uploadimglink->getClientList();
-    //     $this->set('clients', $clients);
-
-    //     if ($this->request->is('post')) {
-    //         $clientId = $this->request->data['Uploadimglink']['client_id'];
-
-    //         $images = $this->Uploadimglink->find('all', array(
-    //             'conditions' => array('Uploadimglink.client_ref_id' => $clientId),
-    //         ));
-
-    //         $this->set('images', $images);
-
-    //         // Set the response header for CSV download
-    //         header('Content-Type: text/csv');
-    //         header('Content-Disposition: attachment;filename=images.csv');
-    //         header('Cache-Control: max-age=0');
-
-    //         // Open the output stream
-    //         $output = fopen('php://output', 'w');
-
-    //         // Output CSV header
-    //         fputcsv($output, array('client id','SKU_CODE', 'Image 1', 'Image 2', 'Image 3', 'Image 4', 'Image 5'));
-
-    //         // Output CSV data
-    //         foreach ($images as $image) {
-    //             $rowData = array(
-    //                 $image['Uploadimglink']['client_ref_id'],
-    //                 $image['Uploadimglink']['SKU_CODE'],
-    //                 $image['Uploadimglink']['image1'],
-    //                 $image['Uploadimglink']['image2'],
-    //                 $image['Uploadimglink']['image3'],
-    //                 $image['Uploadimglink']['image4'],
-    //                 $image['Uploadimglink']['image5'],
-    //             );
-    //             fputcsv($output, $rowData);
-    //         }
-
-    //         // Close the output stream
-    //         fclose($output);
-
-    //         exit;
-    //     }
-    // }
-
-
-
-    //new with sku code input 
     public function downloadImages() {
         $clients = $this->Uploadimglink->getClientList();
         $this->set('clients', $clients);
 
         if ($this->request->is('post')) {
             $clientId = $this->request->data['Uploadimglink']['client_id'];
-            $skuCodesInput = $this->request->data['Uploadimglink']['sku_codes'];
-
-            // Split the input into an array of SKU codes
-            $skuCodes = explode(PHP_EOL, $skuCodesInput);
-            $skuCodes = array_map('trim', $skuCodes);
-
-            $conditions = array('Uploadimglink.client_ref_id' => $clientId);
-
-            // Add condition to filter by SKU codes if provided
-            if (!empty($skuCodes)) {
-                $conditions['Uploadimglink.SKU_CODE IN'] = $skuCodes;
-            }
 
             $images = $this->Uploadimglink->find('all', array(
-                'conditions' => $conditions,
+                'conditions' => array('Uploadimglink.client_ref_id' => $clientId),
             ));
 
             $this->set('images', $images);
@@ -290,12 +230,12 @@ class ImagevurlController extends AppController {
             $output = fopen('php://output', 'w');
 
             // Output CSV header
-            fputcsv($output, array('client id', 'SKU_CODE', 'Image 1', 'Image 2', 'Image 3', 'Image 4', 'Image 5'));
+            fputcsv($output, array('SKU_CODE', 'Image 1', 'Image 2', 'Image 3', 'Image 4', 'Image 5'));
 
             // Output CSV data
             foreach ($images as $image) {
                 $rowData = array(
-                    $image['Uploadimglink']['client_ref_id'],
+                    $image['']
                     $image['Uploadimglink']['SKU_CODE'],
                     $image['Uploadimglink']['image1'],
                     $image['Uploadimglink']['image2'],
@@ -312,143 +252,5 @@ class ImagevurlController extends AppController {
             exit;
         }
     }
-
-
-
-    //download as zip actual images 
-    public function downloadAllImages() {
-        if ($this->request->is('post')) {
-            $skuCodesInput = $this->request->data['Uploadimglink']['sku_codes'];
-
-            // Split the input into an array of SKU codes
-            $skuCodes = explode(PHP_EOL, $skuCodesInput);
-            $skuCodes = array_map('trim', $skuCodes);
-
-            // Fetch images based on SKU codes
-            $images = $this->Uploadimglink->find('all', array(
-                'conditions' => array('Uploadimglink.SKU_CODE IN' => $skuCodes),
-            ));
-
-            // Create a temporary folder to store converted images
-            $tempFolder = TMP . 'converted_images' . DS;
-            if (!is_dir($tempFolder)) {
-                mkdir($tempFolder);
-            }
-
-            // Convert image links to actual images and store in the temporary folder
-            foreach ($images as $image) {
-                for ($i = 1; $i <= 5; $i++) {
-                    $imageLink = $image['Uploadimglink']['image' . $i];
-                    if (!empty($imageLink)) {
-                        $imageUrl = WWW_ROOT . $imageLink;
-                        $imageData = file_get_contents($imageUrl);
-                        $tempFilename = $tempFolder . $image['Uploadimglink']['SKU_CODE'] . '_' . $i . '.jpg';
-                        file_put_contents($tempFilename, $imageData);
-                    }
-                }
-            }
-
-            // Create a zip archive
-            $zipFilename = WWW_ROOT . 'images.zip';
-            $zip = new ZipArchive();
-            if ($zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-                $files = glob($tempFolder . '*');
-                foreach ($files as $file) {
-                    $zip->addFile($file, basename($file));
-                }
-                $zip->close();
-            }
-
-            // Set the response header for zip file download
-            header('Content-Type: application/zip');
-            header('Content-Disposition: attachment;filename=images.zip');
-            header('Cache-Control: max-age=0');
-
-            // Output the zip file
-            readfile($zipFilename);
-
-            // Remove temporary folder and zip file
-            $this->_rrmdir($tempFolder);
-            unlink($zipFilename);
-
-            exit;
-        }
-    }
-
-    private function _rrmdir($dir) {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != '.' && $object != '..') {
-                    if (is_dir($dir . '/' . $object)) {
-                        $this->_rrmdir($dir . '/' . $object);
-                    } else {
-                        unlink($dir . '/' . $object);
-                    }
-                }
-            }
-            rmdir($dir);
-        }
-    }
     
-
-
-    ///delete image section upadted 
-    public function deleteImages() {
-        $clients = $this->Uploadimglink->getClientList();
-        $this->set('clients', $clients);
-
-        if ($this->request->is('post')) {
-            $clientId = $this->request->data['Uploadimglink']['client_id'];
-
-            $images = $this->Uploadimglink->find('all', array(
-                'conditions' => array('Uploadimglink.client_ref_id' => $clientId),
-            ));
-
-            $this->set('images', $images);
-        }
-    }
-
-    public function confirmDelete($imageId) {
-        // Check if the image ID exists
-        if (!$this->Uploadimglink->exists($imageId)) {
-            throw new NotFoundException(__('Invalid image'));
-        }
-
-        if ($this->request->is('post')) {
-            // Fetch image data
-            $image = $this->Uploadimglink->findById($imageId);
-
-            // Delete image files from the filesystem
-            $this->_deleteImageFiles($image);
-
-            // Delete image entry from the database
-            $this->Uploadimglink->delete($imageId);
-
-            // Display a success message
-            $this->Session->setFlash('Image deleted successfully.');
-        }
-
-        // Redirect to the deleteImages action
-        $this->redirect(array('action' => 'deleteImages'));
-    }
-
-    private function _deleteImageFiles($image) {
-        // Delete image files from the filesystem
-        if (!empty($image['Uploadimglink']['image1'])) {
-            unlink(WWW_ROOT . $image['Uploadimglink']['image1']);
-        }
-        if (!empty($image['Uploadimglink']['image2'])) {
-            unlink(WWW_ROOT . $image['Uploadimglink']['image2']);
-        }
-        if (!empty($image['Uploadimglink']['image3'])) {
-            unlink(WWW_ROOT . $image['Uploadimglink']['image3']);
-        }
-        if (!empty($image['Uploadimglink']['image4'])) {
-            unlink(WWW_ROOT . $image['Uploadimglink']['image4']);
-        }
-        if (!empty($image['Uploadimglink']['image5'])) {
-            unlink(WWW_ROOT . $image['Uploadimglink']['image5']);
-        }
-    }
 }

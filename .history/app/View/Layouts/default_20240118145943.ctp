@@ -43,16 +43,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     <ul class="nav-links">
         <li><?php echo $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display', 'home')); ?></li>
         <li><?php echo $this->Html->link('Add a client', array('controller' => 'Clients', 'action' => 'add')); ?></li>
-
-		<li><?php echo $this->Html->link('download image', array('controller' => 'Imagevurl', 'action' => 'downloadImages')); ?></li>
-
-
-
-		<li><?php echo $this->Html->link('view images', array('controller' => 'Images', 'action' => 'clientImages')); ?></li>
-
-		
-
-
         <li class="image-upload">
             <?php
                 echo $this->Html->link('Image Upload','#' , array('id' => 'image-upload-link')); // Placeholder link for the dropdown

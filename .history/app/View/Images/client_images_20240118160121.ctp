@@ -1,24 +1,6 @@
 <!-- app/View/Imagevurl/client_images.ctp -->
 <style>
-    table {
-        width: 50%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    table, th, td {
-        border: 1px solid black;
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: center;
-    }
-
-    img {
-        max-width: 100px;
-        max-height: 100px;
-    }
+   
 </style>
 
 <?php echo $this->Form->create('Uploadimglink'); ?>

@@ -1,7 +1,7 @@
 <!-- app/View/Imagevurl/client_images.ctp -->
 <style>
     table {
-        width: 50%;
+        width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
     }
@@ -27,7 +27,7 @@
 
 <?php if (isset($images)): ?>
     <h2>Images for Selected Client</h2>
-    <table class = "clientdetailstab">
+    <table class = "">
         <thead>
             <tr>
                 <th>SKU Code</th>

@@ -1,7 +1,7 @@
 <!-- app/View/Imagevurl/client_images.ctp -->
 <style>
     table {
-        width: 50%;
+        width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
     }

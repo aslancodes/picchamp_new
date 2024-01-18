@@ -48,7 +48,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
 
 
-		<li><?php echo $this->Html->link('view images', array('controller' => 'Images', 'action' => 'clientImages')); ?></li>
+		<li><?php echo $this->Html->link('view images', array('controller' => 'Images', 'action' => '')); ?></li>
 
 		
 
