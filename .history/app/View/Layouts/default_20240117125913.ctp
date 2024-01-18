@@ -48,7 +48,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
                 echo $this->Html->link('Image Upload','#' , array('id' => 'image-upload-link')); // Placeholder link for the dropdown
                 echo '<ul class="dropdown-menu" style="display:none;">'; // Start of the dropdown menu
                 echo '<li>' . $this->Html->link('Upload from URL', array('controller' => 'Imagevurl', 'action' => 'upload')) . '</li>'; // Sub-option for Via URL
-				echo '<li>' . $this->Html->link('Upload from HDD', array('controller' => 'Images', 'action' => 'add')) . '</li>'; 
+				echo '<li>' . $this->Html->link('Upload from URL', array('controller' => 'Images', 'action' => 'add')) . '</li>'; 
                 echo '</ul>'; // End of the dropdown menu
             ?>
         </li>
@@ -74,7 +74,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			?>
 		</div>
 	</div>
-	<!-- <?php echo $this->element('sql_dump'); ?> -->
+	<?php echo $this->element('sql_dump'); ?>
 	<script>
     document.addEventListener('DOMContentLoaded', function() {
         var imageUploadLink = document.getElementById('image-upload-link');

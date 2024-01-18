@@ -103,43 +103,25 @@ if ($this->request->is('post')) {
 
    
 
-    // public function clientImages() {
-    //     // Fetch client list for the dropdown
-    //     $clients = $this->Image->getClientList();
-    //     $this->set('clients', $clients);
-
-    //     if ($this->request->is('post')) {
-    //         $selectedClientId = $this->request->data['Image']['client_ref_id'];
-
-    //         // Fetch images for the selected client
-    //         $images = $this->Image->find('all', array(
-    //             'conditions' => array('Image.client_ref_id' => $selectedClientId)
-    //         ));
-
-    //         $this->set('selectedClientId', $selectedClientId);
-    //         $this->set('images', $images);
-    //     }
-    // }
-
-
-    //////////// new working functions as per standards 
-    public $uses = array('Uploadimglink', 'Client'); // Include the Client model
-
     public function clientImages() {
-        $clients = $this->Uploadimglink->getClientList();
+        // Fetch client list for the dropdown
+        $clients = $this->Image->getClientList();
         $this->set('clients', $clients);
 
         if ($this->request->is('post')) {
-            $clientId = $this->request->data['Uploadimglink']['client_id'];
-            $images = $this->Uploadimglink->find('all', array(
-                'conditions' => array('Uploadimglink.client_ref_id' => $clientId),
+            $selectedClientId = $this->request->data['Image']['client_ref_id'];
+
+            // Fetch images for the selected client
+            $images = $this->Image->find('all', array(
+                'conditions' => array('Image.client_ref_id' => $selectedClientId)
             ));
+
+            $this->set('selectedClientId', $selectedClientId);
             $this->set('images', $images);
         }
     }
 
 
-    //need to improve 
     public function downloadByClient($clientId, $imageId) {
         $image = $this->Image->find('first', array(
             'conditions' => array(
@@ -170,5 +152,5 @@ if ($this->request->is('post')) {
         // Return the response object to initiate the download
         return $this->response;
     }
-
+}
 }

@@ -62,8 +62,6 @@ class ImagevurlController extends AppController {
     
     public $uses = array('Uploadimglink', 'Client'); // Include the Client model
 
-
-    //upload csv 
     public function upload() {
         $clients = $this->Uploadimglink->getClientList();
         $this->set('clients', $clients);
@@ -123,83 +121,5 @@ class ImagevurlController extends AppController {
 
 
 
-    //functions for the uploading of the images 
-
-    public function addImages() {
-        $clients = $this->Uploadimglink->getClientList();
-        $this->set('clients', $clients);
-
-        if ($this->request->is('post')) {
-            $skuCodes = explode(',', $this->request->data['Uploadimglink']['sku_codes']);
-            $clientId = $this->request->data['Uploadimglink']['client_id'];
-
-            // Pass SKU codes and client ID to the next action
-            $this->redirect(array(
-                'controller' => 'Imagevurl',
-                'action' => 'uploadImages',
-                '?' => array(
-                    'sku_codes' => $skuCodes,
-                    'client_id' => $clientId,
-                )
-            ));
-        }
-    }
-
-    public function uploadImages() {
-        // Retrieve SKU codes and client ID from the URL parameters
-        $skuCodes = $this->params['url']['sku_codes'];
-        $clientId = $this->params['url']['client_id'];
-
-        // Set the SKU codes and client ID in the view
-        $this->set('skuCodes', $skuCodes);
-        $this->set('clientId', $clientId);
-
-        if ($this->request->is('post')) {
-            // Process image uploads and store data in the database
-            $this->_processImageUploads($skuCodes, $clientId);
-            $this->Session->setFlash('Images uploaded and data inserted into db successfully.');
-        }
-    }
-
-    private function _processImageUploads($skuCodes, $clientId) {
-        foreach ($skuCodes as $skuCode) {
-            // Save data in the database based on your requirements
-            $data = array(
-                'Uploadimglink' => array(
-                    'SKU_CODE' => $skuCode,
-                    'client_ref_id' => $clientId,
-                    'image1' => $this->_uploadAndConvertToLink($skuCode, 1),
-                    'image2' => $this->_uploadAndConvertToLink($skuCode, 2),
-                    'image3' => $this->_uploadAndConvertToLink($skuCode, 3),
-                    'image4' => $this->_uploadAndConvertToLink($skuCode, 4),
-                    'image5' => $this->_uploadAndConvertToLink($skuCode, 5),
-                    // Add other necessary fields
-                )
-            );
-
-            $this->Uploadimglink->create();
-            $this->Uploadimglink->save($data);
-        }
-    }
-
-    private function _uploadAndConvertToLink($skuCode, $imageNumber) {
-        $uploadedFile = $this->request->data['Uploadimglink']['image_' . $skuCode . '_' . $imageNumber];
-        $targetFolder = WWW_ROOT . 'uploads' . DS;
-    
-        // Create the uploads folder if it doesn't exist
-        if (!file_exists($targetFolder)) {
-            mkdir($targetFolder, 0777, true);
-        }
-    
-        $targetFile = $targetFolder . basename($uploadedFile['name']);
-    
-        if (move_uploaded_file($uploadedFile['tmp_name'], $targetFile)) {
-            // Return the link to the uploaded file
-            return '/uploads/' . $uploadedFile['name'];
-        } else {
-            // Handle upload failure
-            return null;
-        }
-    }
-    
+    //functions 
 }

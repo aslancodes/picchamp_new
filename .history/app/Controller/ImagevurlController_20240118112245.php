@@ -63,7 +63,7 @@ class ImagevurlController extends AppController {
     public $uses = array('Uploadimglink', 'Client'); // Include the Client model
 
 
-    //upload csv 
+    //
     public function upload() {
         $clients = $this->Uploadimglink->getClientList();
         $this->set('clients', $clients);

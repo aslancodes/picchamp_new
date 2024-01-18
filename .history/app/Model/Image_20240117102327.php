@@ -25,13 +25,7 @@ class Image extends AppModel {
 
 
 
-    public function uploadFile($check) {
-        $file = current($check);
-
-        // Perform additional validation if needed
-
-        return true;
-    }
+    
 
     // app/Model/Image.php
 

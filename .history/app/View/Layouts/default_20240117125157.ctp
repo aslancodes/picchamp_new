@@ -43,18 +43,18 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     <ul class="nav-links">
         <li><?php echo $this->Html->link('Home', array('controller' => 'pages', 'action' => 'display', 'home')); ?></li>
         <li><?php echo $this->Html->link('Add a client', array('controller' => 'Clients', 'action' => 'add')); ?></li>
-        <li class="image-upload">
+        <li>
             <?php
-                echo $this->Html->link('Image Upload','#' , array('id' => 'image-upload-link')); // Placeholder link for the dropdown
-                echo '<ul class="dropdown-menu" style="display:none;">'; // Start of the dropdown menu
+                echo $this->Html->link('Image Upload', '#'); // Placeholder link for the dropdown
+                echo '<ul>'; // Start of the dropdown menu
                 echo '<li>' . $this->Html->link('Upload from URL', array('controller' => 'Imagevurl', 'action' => 'upload')) . '</li>'; // Sub-option for Via URL
-				echo '<li>' . $this->Html->link('Upload from HDD', array('controller' => 'Images', 'action' => 'add')) . '</li>'; 
                 echo '</ul>'; // End of the dropdown menu
             ?>
         </li>
         <li><?php echo $this->Html->link('View All Images', array('controller' => 'Images', 'action' => 'view')); ?></li>
     </ul>
 </div>
+
 	<div id="container">
 		<!-- <div id="header">
 			<h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
@@ -74,18 +74,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			?>
 		</div>
 	</div>
-	<!-- <?php echo $this->element('sql_dump'); ?> -->
-	<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var imageUploadLink = document.getElementById('image-upload-link');
-        var dropdownMenu = document.querySelector('.image-upload .dropdown-menu');
-
-        imageUploadLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Toggle the visibility of the dropdown menu
-            dropdownMenu.style.display = (dropdownMenu.style.display === 'none' || dropdownMenu.style.display === '') ? 'block' : 'none';
-        });
-    });
-</script>
+	<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>

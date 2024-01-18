@@ -62,8 +62,6 @@ class ImagevurlController extends AppController {
     
     public $uses = array('Uploadimglink', 'Client'); // Include the Client model
 
-
-    //upload csv 
     public function upload() {
         $clients = $this->Uploadimglink->getClientList();
         $this->set('clients', $clients);
@@ -130,7 +128,7 @@ class ImagevurlController extends AppController {
         $this->set('clients', $clients);
 
         if ($this->request->is('post')) {
-            $skuCodes = explode(',', $this->request->data['Uploadimglink']['sku_codes']);
+            $skuCodes = $this->request->data['Uploadimglink']['sku_codes'];
             $clientId = $this->request->data['Uploadimglink']['client_id'];
 
             // Pass SKU codes and client ID to the next action
@@ -168,11 +166,6 @@ class ImagevurlController extends AppController {
                 'Uploadimglink' => array(
                     'SKU_CODE' => $skuCode,
                     'client_ref_id' => $clientId,
-                    'image1' => $this->_uploadAndConvertToLink($skuCode, 1),
-                    'image2' => $this->_uploadAndConvertToLink($skuCode, 2),
-                    'image3' => $this->_uploadAndConvertToLink($skuCode, 3),
-                    'image4' => $this->_uploadAndConvertToLink($skuCode, 4),
-                    'image5' => $this->_uploadAndConvertToLink($skuCode, 5),
                     // Add other necessary fields
                 )
             );
@@ -181,25 +174,4 @@ class ImagevurlController extends AppController {
             $this->Uploadimglink->save($data);
         }
     }
-
-    private function _uploadAndConvertToLink($skuCode, $imageNumber) {
-        $uploadedFile = $this->request->data['Uploadimglink']['image_' . $skuCode . '_' . $imageNumber];
-        $targetFolder = WWW_ROOT . 'uploads' . DS;
-    
-        // Create the uploads folder if it doesn't exist
-        if (!file_exists($targetFolder)) {
-            mkdir($targetFolder, 0777, true);
-        }
-    
-        $targetFile = $targetFolder . basename($uploadedFile['name']);
-    
-        if (move_uploaded_file($uploadedFile['tmp_name'], $targetFile)) {
-            // Return the link to the uploaded file
-            return '/uploads/' . $uploadedFile['name'];
-        } else {
-            // Handle upload failure
-            return null;
-        }
-    }
-    
 }

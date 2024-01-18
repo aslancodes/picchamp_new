@@ -122,7 +122,7 @@ if ($this->request->is('post')) {
     // }
 
 
-    //////////// new working functions as per standards 
+
     public $uses = array('Uploadimglink', 'Client'); // Include the Client model
 
     public function clientImages() {
@@ -137,9 +137,9 @@ if ($this->request->is('post')) {
             $this->set('images', $images);
         }
     }
+}
 
 
-    //need to improve 
     public function downloadByClient($clientId, $imageId) {
         $image = $this->Image->find('first', array(
             'conditions' => array(

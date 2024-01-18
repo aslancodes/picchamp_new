@@ -74,7 +74,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			?>
 		</div>
 	</div>
-	<!-- <?php echo $this->element('sql_dump'); ?> -->
+	<?php echo $this->element('sql_dump'); ?>
 	<script>
     document.addEventListener('DOMContentLoaded', function() {
         var imageUploadLink = document.getElementById('image-upload-link');

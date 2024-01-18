@@ -62,8 +62,6 @@ class ImagevurlController extends AppController {
     
     public $uses = array('Uploadimglink', 'Client'); // Include the Client model
 
-
-    //upload csv 
     public function upload() {
         $clients = $this->Uploadimglink->getClientList();
         $this->set('clients', $clients);
@@ -183,16 +181,13 @@ class ImagevurlController extends AppController {
     }
 
     private function _uploadAndConvertToLink($skuCode, $imageNumber) {
+        // Handle file upload logic here and return the link
+        // You'll need to adjust this based on your file upload logic
+        // For simplicity, let's assume the files are stored in the webroot/uploads directory
         $uploadedFile = $this->request->data['Uploadimglink']['image_' . $skuCode . '_' . $imageNumber];
         $targetFolder = WWW_ROOT . 'uploads' . DS;
-    
-        // Create the uploads folder if it doesn't exist
-        if (!file_exists($targetFolder)) {
-            mkdir($targetFolder, 0777, true);
-        }
-    
         $targetFile = $targetFolder . basename($uploadedFile['name']);
-    
+
         if (move_uploaded_file($uploadedFile['tmp_name'], $targetFile)) {
             // Return the link to the uploaded file
             return '/uploads/' . $uploadedFile['name'];
@@ -201,5 +196,4 @@ class ImagevurlController extends AppController {
             return null;
         }
     }
-    
 }

@@ -47,13 +47,21 @@ if ($this->request->is('post')) {
     } else {
         $this->Session->setFlash('Please upload a valid image file.');
     }
+
+
 // Rest of your code
-        }        
+
+        }
+        
+        
     }
+
+
     public function view(){
         $images = $this->Image->find('all');
         $this->set('images', $images);
     }
+
     public function delete($id) {
         if (!$this->request->is('post')) {
             throw new MethodNotAllowedException();
@@ -102,73 +110,4 @@ if ($this->request->is('post')) {
     }
 
    
-
-    // public function clientImages() {
-    //     // Fetch client list for the dropdown
-    //     $clients = $this->Image->getClientList();
-    //     $this->set('clients', $clients);
-
-    //     if ($this->request->is('post')) {
-    //         $selectedClientId = $this->request->data['Image']['client_ref_id'];
-
-    //         // Fetch images for the selected client
-    //         $images = $this->Image->find('all', array(
-    //             'conditions' => array('Image.client_ref_id' => $selectedClientId)
-    //         ));
-
-    //         $this->set('selectedClientId', $selectedClientId);
-    //         $this->set('images', $images);
-    //     }
-    // }
-
-
-    //////////// new working functions as per standards 
-    public $uses = array('Uploadimglink', 'Client'); // Include the Client model
-
-    public function clientImages() {
-        $clients = $this->Uploadimglink->getClientList();
-        $this->set('clients', $clients);
-
-        if ($this->request->is('post')) {
-            $clientId = $this->request->data['Uploadimglink']['client_id'];
-            $images = $this->Uploadimglink->find('all', array(
-                'conditions' => array('Uploadimglink.client_ref_id' => $clientId),
-            ));
-            $this->set('images', $images);
-        }
-    }
-
-
-    //need to improve 
-    public function downloadByClient($clientId, $imageId) {
-        $image = $this->Image->find('first', array(
-            'conditions' => array(
-                'Image.id' => $imageId,
-                'Image.client_ref_id' => $clientId
-            )
-        ));
-
-        if (!$image) {
-            throw new NotFoundException(__('Invalid image'));
-        }
-
-        // Ensure that 'filename' is set in the image data
-        if (!isset($image['Image']['filename'])) {
-            throw new InternalErrorException(__('Invalid image data'));
-        }
-
-        $filename = $image['Image']['original_filename']; // Use the original filename
-        $fileContent = $image['Image']['filename'];
-
-        // Create a temporary file to store the blob data
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'download_');
-        file_put_contents($tempFilePath, $fileContent);
-
-        // Send the file as a response
-        $this->response->file($tempFilePath, array('download' => true, 'name' => $filename));
-
-        // Return the response object to initiate the download
-        return $this->response;
-    }
-
 }

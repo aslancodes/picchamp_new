@@ -122,7 +122,7 @@ if ($this->request->is('post')) {
     // }
 
 
-    //////////// new working functions as per standards 
+
     public $uses = array('Uploadimglink', 'Client'); // Include the Client model
 
     public function clientImages() {
